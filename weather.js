@@ -16,8 +16,9 @@ function printMessage(place, temp, summary) {
   }
   
   function getWeather(lat, long) {
-      if (response.statusCode === 200) {
-        const request = https.get(`https://api.darksky.net/forecast/${api.key}/${lat},${long}`, response => {
+    try {
+      const request = https.get(`https://api.darksky.net/forecast/${api.key}/${lat},${long}`, response => {
+        if (response.statusCode === 200) {
           let body = ""
         
           response.on('data', data => {
@@ -33,11 +34,15 @@ function printMessage(place, temp, summary) {
             }
           }); 
 
-        });
-        request.on('error', error => printError('Problem with Request'));
-      } else {
-        const statusError = `Status Code: ${response.statusCode}`;
-        printError(statusError);
+        } else {
+          const statusError = `Status Code: ${response.statusCode}`;
+          printError(statusError);
+        }
+      });
+      request.on('error', error => printError('Problem with Request'));
+
+    } catch (error) {
+        printError('Problem with Request');
       }
 }
 
