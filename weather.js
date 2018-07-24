@@ -15,9 +15,9 @@ function printMessage(place, temp, summary) {
     console.error(message);
   }
   
-  function getWeather(lat, long) {
+  function getWeather(coordinate) {
     try {
-      const request = https.get(`https://api.darksky.net/forecast/${api.key}/${lat},${long}`, response => {
+      const request = https.get(`https://api.darksky.net/forecast/${api.key}/${coordinate}`, response => {
         if (response.statusCode === 200) {
           let body = ""
         
