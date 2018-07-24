@@ -16,17 +16,33 @@ function printMessage(place, temp, summary) {
   }
   
   function getWeather(lat, long) {
-    const request = https.get(`https://api.darksky.net/forecast/${api.key}/${lat},${long}`, response => {
-      let body = ""
+    try {
+      if (response.statusCode === 200) {
+        const request = https.get(`https://api.darksky.net/forecast/${api.key}/${lat},${long}`, response => {
+          let body = ""
         
-      response.on('data', data => {
-        body += data.toString();
-      });
+          response.on('data', data => {
+            body += data.toString();
+          });
   
-      response.on('end', () => {
-          var forecast = JSON.parse(body);                        
-          printMessage(forecast.timezone, forecast.currently.temperature, forecast.currently.summary);
-      });  
-    });
-  }
+          response.on('end', () => {
+            try {
+              var forecast = JSON.parse(body);                        
+              printMessage(forecast.timezone, forecast.currently.temperature, forecast.currently.summary);
+            } catch (error) {
+              console.error('Your input does not exist');
+            }
+          }); 
+
+        });
+        request.on('error', error => printError('Problem with Request'));
+      } else {
+        const statusError = `Status Code: ${response.statusCode}`;
+        printError(statusError);
+      }
+
+    } catch (error) {
+      printError('Problem with Request');
+    }
+}
   
