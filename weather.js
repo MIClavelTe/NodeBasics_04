@@ -16,7 +16,6 @@ function printMessage(place, temp, summary) {
   }
   
   function getWeather(lat, long) {
-    try {
       if (response.statusCode === 200) {
         const request = https.get(`https://api.darksky.net/forecast/${api.key}/${lat},${long}`, response => {
           let body = ""
@@ -40,9 +39,7 @@ function printMessage(place, temp, summary) {
         const statusError = `Status Code: ${response.statusCode}`;
         printError(statusError);
       }
-
-    } catch (error) {
-      printError('Problem with Request');
-    }
 }
+
+module.exports.getWeather = getWeather;
   
