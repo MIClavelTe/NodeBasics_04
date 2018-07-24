@@ -1,3 +1,4 @@
 const weather = require('./weather.js');
 
-weather.getWeather(37,-122);
+const places = process.argv.slice(2);
+places.forEach(weather.getWeather);
